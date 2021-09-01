@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clixove</title>
+    {% include 'clixove.org/packages.html' %}
+</head>
+<body>
+<div class="container-fluid  d-flex flex-column justify-content-between" style="height: 100vh;">
+    <div class="row">{% include 'clixove.org/navigator.html' %}</div>
+    <div class="row alert justify-content-center">
+        <div class="col-md-6">
+            <label><button onclick="start_training('/runtime/train/{{ factory.id }}/0')"
+                    class="btn btn-lg btn-outline-success mb-4" {% if factory.busy %}disabled{% endif %}>
+                Start training
+            </button></label>
+            <p class="text-start">
+                <button onclick="start_training('/runtime/train/{{ factory.id }}/1')" class="btn p-0 text-primary"
+                   {% if factory.busy %}disabled{% endif %}>
+                Training (skip pre-processing steps)
+                </button> <label style="width: 2ch;"></label>
+                <span class="helptext">
+                    If you have trained once or more, and haven't changed pre-processing settings since then.
+                    This option is better for you.
+                </span>
+            </p>
+            <table class="table table-hover table-borderless" id="modeling-report">
+                <tbody>
+                <tr>
+                    <th>Last trained date</th><td>{{ factory.trained_time | date:'Y-m-d H:i:s' }}</td>
+                </tr>
+                <tr>
+                    <th>MAE</th><td>{{ factory.mae | floatformat:4 }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="alert alert-primary fade show" role="alert">
+                <strong>Training info:</strong> <span id="training-hint"></span>
+            </div>
+            <p>
+                <a class="btn p-0 text-primary" data-bs-toggle="collapse" href="#training-history" role="button"
+                   aria-expanded="false" aria-controls="collapseExample">
+                    Training history
+                </a>
+            </p>
+        </div>
+        <div class="col-md-6 collapse" id="training-history">
+            {{ factory.validation_loss | safe }}
+        </div>
+    </div>
+    <div class="row">{% include 'clixove.org/copyright.html' %}</div>
+</div>
+</body>
+</html>
+
+<script>
+    function start_training(url) {
+        $.ajax({
+            type: 'GET', url: url,
+            success: (response) => {
+                document.getElementById('training-hint').innerText = response;
+            }
+        });
+        document.getElementById('training-hint').innerText = "Start training, please wait for several minutes and " +
+            "refresh to view results."
+    }
+</script>

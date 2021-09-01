@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clixove</title>
+    {% include 'clixove.org/packages.html' %}
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">{% include 'clixove.org/navigator.html' %}</div>
+    <div class="row alert justify-content-center">
+        <div class="col-md-8">
+            <form action="/factory/add-3" method="post">
+                {{ assign_column.factory }}
+                {{ assign_column.test_field }}
+                <p>Analytical period</p>
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <label>From {{ assign_column.from_datetime }}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label>To {{ assign_column.to_datetime }}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Number of time points {{ assign_column.periods }}</label>
+                    </div>
+                </div>
+                <p class="helptext">Format datetime string like '2020-01-01 00:00:00'.</p>
+                <div style="overflow-x: auto;">
+                    <table class="table table-hover">
+                    <caption class="caption-top">Transaction table</caption>
+                        <thead>
+                        <tr>
+                            <th>Name</th><th>Is date</th><th>Is company</th><th>Is attribute</th>
+                            <th>Logarithmic transform</th><th>Finite difference</th><th>Evaluative</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for column in transaction_columns %}
+                        <tr>
+                            <td class="text-nowrap">{{ column.name }}</td>
+                            <td><label><input type="radio" name="date" value="{{ column.id }}" {% if column.is_date %}checked{% endif %}></label></td>
+                            <td><label><input type="radio" name="company_trans" value="{{ column.id }}" {% if column.is_company %}checked{% endif %}></label></td>
+                            <td><label><input type="checkbox" name="use" value="{{ column.id }}" {% if column.use %}checked{% endif %}></label></td>
+                            <td><label><input type="checkbox" name="log" value="{{ column.id }}" {% if column.log %}checked{% endif %}></label></td>
+                            <td><label><input type="checkbox" name="diff" value="{{ column.id }}" {% if column.diff %}checked{% endif %}></label></td>
+                            <td><label><input type="checkbox" name="fill_na_avg" value="{{ column.id }}" {% if column.fill_na_avg %}checked{% endif %}></label></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="table table-hover">
+                        <caption class="caption-top">Score table</caption>
+                        <thead>
+                        <tr>
+                            <th>Name</th><th>Is company</th><th>Is score</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for column in score_columns %}
+                        <tr>
+                        <td class="text-nowrap">{{ column.name }}</td>
+                        <td><label><input type="radio" name="company_score" value="{{ column.id }}" {% if column.is_company %}checked{% endif %}></label></td>
+                        <td><label><input type="radio" name="score" value="{{ column.id }}" {% if column.is_score %}checked{% endif %}></label></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <ul class="helptext">
+                    <li>'Attribute' means a dimension of time series, which should be inputted to LSTM neural network.</li>
+                    <li>Logarithmic transformation formula: x' = ln(x + 1) </li>
+                </ul>
+                <div class="text-center">
+                    <input type="submit" class="btn btn-outline-success" value="Next">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">{% include 'clixove.org/copyright.html' %}</div>
+</div>
+</body>
+</html>

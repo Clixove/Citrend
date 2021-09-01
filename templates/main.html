@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clixove</title>
+    {% include 'clixove.org/packages.html' %}
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">{% include 'clixove.org/navigator.html' %}</div>
+    <div class="row alert bg-light mb-0">
+        <div class="col-md-12 text-center d-flex flex-column justify-content-center">
+            <p class="display-4">Citrend</p>
+            <p class="lead fst-italic fw-normal">The software for scoring SMEs customers by transaction</p>
+        </div>
+    </div>
+{% if request.user.is_authenticated %}
+    <div class="row alert mb-0">
+        <div class="col-md-12">
+            <p class="lead fw-normal">My factories</p>
+        </div>
+    </div>
+    <div class="row alert">
+        {% for factory in factories %}
+        <div class="col-md-4">
+        <div class="alert shadow fade show" role="alert">
+            <p><strong>{{ factory.name }}</strong></p>
+
+            <table class="table table-borderless">
+                <tbody>
+                <tr>
+                    <td>Trained time</td><td>{{ factory.trained_time | date:'Y-m-d H:i:j' }}</td>
+                </tr>
+                <tr>
+                    <td>Model existed?</td><td>
+                    {% if factory.model_0 %}
+                    <img src="/static/admin/img/icon-yes.svg" alt="True">
+                        MAE = {{ factory.mae | floatformat:4 }}
+                    {% else %}
+                    <img src="/static/admin/img/icon-no.svg" alt="False">
+                    {% endif %}
+                </td>
+                </tr>
+                <tr>
+                    <td>Busy?</td><td>
+                    {% if factory.busy %}
+                    <img src="/static/admin/img/icon-yes.svg" alt="True">
+                    {% else %}
+                    <img src="/static/admin/img/icon-no.svg" alt="False">
+                    {% endif %}
+                </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Build
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/factory/{{ factory.id }}/view-add-2">
+                            Select tables
+                        </a></li>
+                        <li><a class="dropdown-item" href="/factory/{{ factory.id }}/view-add-3">
+                            Config data pre-processing
+                        </a></li>
+                        <li><a class="dropdown-item" href="/factory/{{ factory.id }}/view-add-4">
+                            Config model
+                        </a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/runtime/view_train/{{ factory.id }}">
+                            Train
+                        </a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/factory/{{ factory.id }}/delete">Delete</a></li>
+                    </ul>
+                </div>
+                <a class="btn btn-outline-success" href="/runtime/view_predict/{{ factory.id }}">Predict</a>
+            </div>
+        </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+    <div class="row alert bg-light mb-0">
+        <div class="col-md-12">
+            <p class="lead fw-normal">Features and advantages</p>
+        </div>
+    </div>
+    <div class="row alert bg-light">
+        <div class="col-md-4 d-flex justify-content-center mb-4">
+            <div class="card" style="width: 24rem;">
+              <img src="/static/feature/lstm-model.png" class="card-img-top" alt="..." style="height: 16rem;">
+              <div class="card-body">
+                <h5 class="card-title">Long-short term memory</h5>
+                <p class="card-text">
+                    Our workflow uses Long-short term memory to fit a external regression model for multi-dimensional
+                    time series, and automatically generate a neural network based on the config. It discovers trends
+                    from nonlinear pattern or fragments from time series.
+                </p>
+                  <p><a href="https://zhuanlan.zhihu.com/p/139617364">Picture citation</a></p>
+              </div>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex justify-content-center mb-4">
+            <div class="card" style="width: 24rem;">
+              <img src="/static/feature/3d-tensor.png" class="card-img-top" alt="..." style="height: 16rem;">
+              <div class="card-body">
+                <h5 class="card-title">Automatic data pre-processing</h5>
+                <p class="card-text">
+                    Our workflow automatic converts your transaction from database records to 3D tensor. It extracts
+                    datetime and company index, transform and perform finite differences, fill missing values of
+                    evaluative or cumulative variables, normalize and zip according to a simple config.
+                </p>
+              </div>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex justify-content-center mb-4">
+            <div class="card" style="width: 24rem;">
+              <img src="/static/feature/evaluation.png" class="card-img-top" alt="..." style="height: 16rem;">
+              <div class="card-body">
+                <h5 class="card-title">Model evaluation and reuse</h5>
+                <p class="card-text">
+                    Our workflow gives interface to adjust hyper-parameters of the model. It gives a curve of training
+                    historical MAE for diagnosing and re-training. During the predicting process, all converters are
+                    reused for transforming the result to readable formation.
+                </p>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">{% include 'clixove.org/copyright.html' %}</div>
+</div>
+</body>
+</html>
