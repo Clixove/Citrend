@@ -1,4 +1,4 @@
-from io import BytesIO
+from payment.models import Prestige
 import matplotlib.pyplot as plt
 from django.contrib.auth.decorators import permission_required
 from django.http.response import HttpResponse, FileResponse
@@ -61,6 +61,8 @@ def train(req, idx, processed):
         factory.busy = False
         factory.save()
         return HttpResponse(str(e))
+    new_prestige = Prestige(created_user=req.user, amount=0, training_tickets=-1)
+    new_prestige.save()
     factory.busy = False
     factory.save()
     return HttpResponse('Successfully trained.')
@@ -100,11 +102,10 @@ def view_predict(req, idx, second_step=None):
     spd = SelectPredictData()
     spd.load_factory(user=req.user, factory=factory)
     context = {
-        'load_predict_data': second_step if second_step else spd,
-        'purpose': '/runtime/predict' if second_step else '/runtime/add_predict',
+        'load_predict_data': spd,
         'prediction_history': Predict.objects.filter(factory=factory).order_by('-predicted_time'),
     }
-    return render(req, "task_runtime/predict.html", context)
+    return render(req, "task_manager/create_prediction.html", context)
 
 
 @csrf_exempt
@@ -138,7 +139,8 @@ def add_predict(req):
     except Exception as e:
         factory.delete()
         return redirect(f'/runtime/view_predict/{factory.id}?message=Parsing error, {e}&color=danger')
-    return view_predict(req, factory.id, cp)
+    context = {'config_prediction': cp}
+    return render(req, 'task_runtime/predict.html', context)
 
 
 @permission_required(
@@ -164,12 +166,12 @@ def predict(req):
     cp.load_factory(user=req.user, factory=None)
     cp.load_prediction(user=req.user, prediction=None)
     if not cp.is_valid():
-        return redirect(f'/main?\'Set prediction requirements\' submission is not valid.&color=danger')
+        return HttpResponse('\'Set prediction requirements\' submission is not valid.')
     # ---------- Busy checking handle version START ----------
     factory = cp.cleaned_data['factory']
     prediction = cp.cleaned_data['prediction']
     if factory.busy:
-        return redirect(f'/runtime/view_predict/{factory.id}?message=This factory is busy.&color=warning')
+        return HttpResponse('This factory is busy, so you cannot create a new task.')
     # ---------- Busy checking handle version END   ----------
     factory.busy = True
     factory.save()
@@ -184,8 +186,8 @@ def predict(req):
         factory.save()
         prediction.error_message = str(e)
         prediction.save()
-        return redirect(f'/runtime/view_predict/{factory.id}?message=Parsing error, {e}&color=danger')
+        return HttpResponse(str(e))
     factory.busy = False
     factory.save()
     prediction.save()
-    return redirect(f'/runtime/view_predict/{factory.id}?message=Predict successfully.&color=success')
+    return HttpResponse('Predict successfully, please refresh to view the result.')

@@ -9,14 +9,13 @@
 <div class="container-fluid d-flex flex-column justify-content-between" style="height: 100vh;">
     <div class="row">{% include 'clixove.org/navigator.html' %}</div>
     <div class="row justify-content-center">
-        <div class="col-md-6 d-flex justify-content-end mb-4">
+        <div class="col-md-6 d-flex justify-content-end my-2">
             <div class="card" style="width: 24rem;">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title text-danger">Factory Number UP!</h5>
                     <table class="table table-borderless table-hover">
                         <caption class="fst-italic">
-                            You can still use existed model to predict scores of new customers after expired time,
-                            but at then, changing the training dataset is not available.
+                            Predicting is still available after expired time.
                         </caption>
                         <thead><tr>
                             <td>Name</td><td>Available days</td><td>Prestige cost</td>
@@ -39,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 d-flex mb-4">
+        <div class="col-md-6 d-flex my-2">
             <div class="card" style="width: 24rem;">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title text-warning">Training Tickets UP!</h5>
@@ -47,9 +46,8 @@
                         <p class="mb-0">Price of each training ticket:</p>
                         <p class="text-end"><span class="display-6">{{ training_price }}</span> prestige points</p>
                         <p class="helptext">
-                            Everytime when clicking "train" button to re-train a neural network, regardless of whether
-                            its result is adopted, a ticket will be consumed. Modifying pre-processing and model config
-                            is unlimited.
+                            Every time of training or re-training will consume 1 ticket. Modifying pre-processing and
+                            model config is unlimited.
                         </p>
                     </div>
                     <form method="post" action="/payment/subscription/add-2" class="card-text">
