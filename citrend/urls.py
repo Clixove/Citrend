@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 import my_login.views as v1
 import task_manager.views as v2
-import payment.views as v3
+import paypal.views as v3
 import task_runtime.views as v4
 
 urlpatterns = [
@@ -31,17 +31,11 @@ urlpatterns = [
     path('my_login/register', v1.view_register),
     path('my_login/register/add', v1.add_register),
     path('my_login/register/confirm/<str:invitation_code>', v1.add_user),
-    # payment - donation
-    path('payment/donate', v3.donate),
-    path('payment/method/<int:idx>', v3.view_method),
-    path('payment/transaction', v3.view_transaction),
-    path('payment/add', v3.add_transaction),
-    path('payment/prestige', v3.view_prestige),
-    path('payment/prestige/add/<str:token>', v3.view_add_prestige),
-    path('payment/prestige/add', v3.add_prestige),
-    path('payment/subscription', v3.view_add_subscription),
-    path('payment/subscription/add-1', v3.add_subscription_1),
-    path('payment/subscription/add-2', v3.add_subscription_2),
+    # paypal
+    path('paypal/plans', v3.view_plans),
+    path('paypal/transaction/add', v3.add_transaction),
+    path('paypal/transaction', v3.view_transaction),
+    path('paypal/subscription', v3.view_subscription),
     # task manager
     path('main', v2.view_main),
     path('factory/view-add-1', v2.view_create_factory),
@@ -61,5 +55,4 @@ urlpatterns = [
     path('runtime/file/<int:idx>', v4.view_prediction_results),
     path('runtime/predict', v4.predict),
 ]
-
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

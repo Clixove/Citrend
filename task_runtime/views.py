@@ -1,4 +1,3 @@
-from payment.models import Prestige
 import matplotlib.pyplot as plt
 from django.contrib.auth.decorators import permission_required
 from django.http.response import HttpResponse, FileResponse
@@ -61,8 +60,6 @@ def train(req, idx, processed):
         factory.busy = False
         factory.save()
         return HttpResponse(str(e))
-    new_prestige = Prestige(created_user=req.user, amount=0, training_tickets=-1)
-    new_prestige.save()
     factory.busy = False
     factory.save()
     return HttpResponse('Successfully trained.')

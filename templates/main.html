@@ -9,9 +9,9 @@
 <div class="container-fluid">
     <div class="row">{% include 'clixove.org/navigator.html' %}</div>
     <div class="row alert bg-light mb-0">
-        <div class="col-md-12 text-center d-flex flex-column justify-content-center">
+        <div class="col-md-12 text-center">
             <p class="display-4">Citrend</p>
-            <p class="lead fst-italic fw-normal">The software for scoring SMEs customers by transaction</p>
+            <p class="lead"><i>The software for scoring suppliers & customers by transaction</i></p>
         </div>
     </div>
 {% if request.user.is_authenticated %}
@@ -91,7 +91,9 @@
     <div class="row alert bg-light">
         <div class="col-md-4 d-flex justify-content-center mb-4">
             <div class="card" style="width: 24rem;">
+                <a href="https://zhuanlan.zhihu.com/p/139617364">
               <img src="/static/feature/lstm-model.png" class="card-img-top" alt="..." style="height: 16rem;">
+                </a>
               <div class="card-body">
                 <h5 class="card-title">Long-short term memory</h5>
                 <p class="card-text">
@@ -99,7 +101,6 @@
                     time series, and automatically generate a neural network based on the config. It discovers trends
                     from nonlinear pattern or fragments from time series.
                 </p>
-                  <p><a href="https://zhuanlan.zhihu.com/p/139617364">Picture citation</a></p>
               </div>
             </div>
         </div>

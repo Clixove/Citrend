@@ -1,17 +1,18 @@
-from django.shortcuts import render, redirect
-from .models import *
-from django.contrib.auth.decorators import permission_required
+import json
+import pickle
+from datetime import datetime
+from math import ceil
+
+import pandas as pd
 from django import forms
+from django.contrib.auth.decorators import permission_required
+from django.core.files.base import ContentFile
+from django.core.validators import FileExtensionValidator, MinValueValidator, MaxValueValidator
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.core.validators import FileExtensionValidator, MinValueValidator, MaxValueValidator
-import pandas as pd
-from django.core.files.base import ContentFile
-import pickle
-import json
-from datetime import datetime
-from payment.models import max_existed_factory
-from math import ceil
+
+from .models import *
 
 
 class PublicFactory(forms.Form):
@@ -72,8 +73,6 @@ def create_factory(req):
     nf = CreateFactory(req.POST, req.FILES)
     if not nf.is_valid():
         return redirect('/main?message=\'Create factory\' submission is not valid.&color=danger')
-    if Factory.objects.filter(user=req.user).count() >= max_existed_factory(req.user):
-        return redirect('/main?message=Your factories reach the maximum number.&color=danger')
     new_factory = Factory(
         name=nf.cleaned_data['name'], user=req.user,
         training_set=nf.cleaned_data['training_set'], busy=False

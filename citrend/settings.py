@@ -42,8 +42,7 @@ INSTALLED_APPS = [
     'django_cleanup',
     # basic applications
     'my_login.apps.MyLoginConfig',
-    'payment.apps.PaymentConfig',
-    'admin_site_controller.apps.AdminSiteControllerConfig',
+    'paypal.apps.PaypalConfig',
     # functional applications
     'task_manager.apps.TaskManagerConfig',
     'task_runtime.apps.TaskRuntimeConfig',
