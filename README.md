@@ -62,8 +62,3 @@ python manage.py runserver
 [1] The provided `requirements.txt` is generated from a developing Anaconda.
 It is not a minimal requirement because I remove some functions during 
 programming, and the dependent packages cannot be removed clearly.
-
-[2] The subscription module is available only for companies in China, mainland,
-and have an account of [Alipay](https://b.alipay.com/index2.htm) (merchant 
-version). If you enable this module, pay attention to `pycryptodome` and 
-`pycryptodomex` packages (recommend fixing their versions).
